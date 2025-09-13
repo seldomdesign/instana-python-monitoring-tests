@@ -65,5 +65,8 @@ def read_item(item_id: int, q: Union[str, None] = None):
 EOF
 ```
 
-Test the app with 
+Test the app with `fastapi dev main.py`
+
+
+
 
