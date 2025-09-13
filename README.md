@@ -39,32 +39,14 @@ pip install fastapi[standard]
 
 Verify with `pip freeze` that the following packages are installed: `fastapi`, `starlette`, `pydantic`, `pydantic_core`, `uvicorn`.
 
-Create the `main.py` file and add the following code (as seen on [fastapi](https://fastapi.tiangolo.com/#create-it))
+Create the `main.py` (as seen on [fastapi](https://fastapi.tiangolo.com/#create-it))
 ```sh
-cat <<EOF | tee main.py
 from typing import Union
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-app = FastAPI(docs_url="/docs", redoc_url="/v3/api-docs")
+app = FastAPI()
 
-@app.get("/", response_class=HTMLResponse)
-async def html_homepage():
-    return """
-    <html>
-        <head>
-            <title>FastAPI HTML homepage</title>
-        </head>
-        <body>
-            <h1>Hello World!</h1>
-            <p>
-                Refer to 
-            </p>
-        </body>
-    </html>
-    """
-
-@app.get("/hello/")
-def read_hello_world():
+@app.get("/")
+def read_root():
     return {"Hello": "World"}
 
 @app.get("/items/{item_id}")
@@ -73,7 +55,13 @@ def read_item(item_id: int, q: Union[str, None] = None):
 EOF
 ```
 
-Test the app with `fastapi dev main.py`
+Test the app by running `fastapi dev main.py` while in the `venv` environment. The post result should confirm that the Development Server is up an running, and the app is accessible at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+If everything is working we can now proceed and containerize the applicaiton.
+
+# Build Docker image
+
+
 
 
 
