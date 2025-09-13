@@ -1,2 +1,2 @@
-# python-instana-tracing-test-app
-Python test app for Instana tracing
+# Instana tracing - Fastapi test
+Python FastAPI demo to test for Instana tracing capabilities
