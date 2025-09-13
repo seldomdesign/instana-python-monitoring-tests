@@ -8,25 +8,27 @@ Instana is a full-stack observability platform that provides real-time monitorin
 Instana claims that, among hundreds of [supported technoligies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies) includes also Python, and it does so with a zero-configuration tool that automatically collects key metrics and distributed traces from your Python processes [***official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).
 
 The official Instana documentation covers the speciffic case for FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
-Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. As this solution is based on a mutating webhook, presents a lot of challanges for the CI/CD pipelines, altering after deployment all resources that will need it's magic, rendering this zero-effort automated solution inadequate for an Enterprise environmetn. 
+Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. As this solution is based on a mutating webhook it presents challanges for the CI/CD pipelines, altering after deployment commits/syncs all resources that will accept and need it's magic.
+
+In other workds... Anyone who uses CD tools, like ArgoCD for example, will continously have their Apps in an unsynced status, due to Autotrace Webhooks magic, rendering this zero-effort automated solution inadequate for an Enterprise environment.
 
 Therefore, for the reminder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
 
 ### Requirements:
-- Working K8s cluster (any)
-- Instana Agent: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
+- Working K8s or OS cluster (any)
+- Instana Agent deployed on the cluster: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
 
 ### Based on: 
-- Python 3.9
-- FastAPI [official example](https://fastapi.tiangolo.com/#example).
+- Python 3.12
+- FastAPI Example [official example](https://fastapi.tiangolo.com/#example).
 - Instana Official Documentation: [Monitoring Python](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python)
 
 # Building the FastAPI demo
 
-The FastApi example is based on `fastapi[standard]` dependency. 
+FastAPI is based on Starlette and PyDantic packages, but in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required pachkages.
 After setting up the [virtual environment](https://fastapi.tiangolo.com/virtual-environments/) install the previously mention `fastapi[standard]` dependency.
 
-In this example we will create and use fastapi-test-app folder
+In this example we will create and use fastapi-test-app as working folder
 ```sh
 mkdir fastapi-test-app
 cd fastapi-test-app
@@ -35,7 +37,7 @@ source ./venv/bin/activate
 pip install fastapi[standard]
 ```
 
-Verify with `pip freeze` that the following depndencies are installed: `fastapi`, `starlette`, `pydantic`, `pydantic_core`, `uvicorn`.
+Verify with `pip freeze` that the following packages are installed: `fastapi`, `starlette`, `pydantic`, `pydantic_core`, `uvicorn`.
 
 Create the `main.py` file and add the following code (as seen on [fastapi](https://fastapi.tiangolo.com/#create-it))
 ```sh
