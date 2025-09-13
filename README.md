@@ -30,8 +30,8 @@ After setting up the [virtual environment](https://fastapi.tiangolo.com/virtual-
 
 In this example we will create and use fastapi-test-app as working folder
 ```sh
-mkdir fastapi-test-app
-cd fastapi-test-app
+mkdir app
+cd app
 python3 -m venv ./venv
 source ./venv/bin/activate
 pip install fastapi[standard]
@@ -60,8 +60,24 @@ Test the app by running `fastapi dev main.py` while in the `venv` environment. T
 
 If everything is working we can now proceed and containerize the applicaiton.
 
-# Build Docker image
 
+# Build Docker image
+Back in the project folder create `Dockerfile` and `requirements.txt` files
+```
+cat << EOF | tee requirements.txt
+fastapi[standard]~=0.116
+pydantic~=2.11
+EOF
+
+cat << EOF | tee Dockerfile
+FROM python:3.9
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+COPY ./app /code/app
+CMD ["fastapi", "run", "app/main.py", "--port", "80"]
+EOF
+```
 
 
 
