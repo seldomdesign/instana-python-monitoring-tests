@@ -36,10 +36,27 @@ Create the `main.py` file and add the following code (as seen on [fastapi](https
 cat <<EOF | tee main.py
 from typing import Union
 from fastapi import FastAPI
-app = FastAPI()
+from fastapi.responses import HTMLResponse
+app = FastAPI(docs_url="/docs", redoc_url="/v3/api-docs")
 
-@app.get("/")
-def read_root():
+@app.get("/", response_class=HTMLResponse)
+async def html_homepage():
+    return """
+    <html>
+        <head>
+            <title>FastAPI HTML homepage</title>
+        </head>
+        <body>
+            <h1>Hello World!</h1>
+            <p>
+                Refer to 
+            </p>
+        </body>
+    </html>
+    """
+
+@app.get("/hello/")
+def read_hello_world():
     return {"Hello": "World"}
 
 @app.get("/items/{item_id}")
