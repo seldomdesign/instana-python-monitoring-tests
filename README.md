@@ -70,7 +70,7 @@ pydantic~=2.11
 EOF
 
 cat << EOF | tee Dockerfile
-FROM python:3.9
+FROM python:3.12-slim
 WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
@@ -79,6 +79,15 @@ CMD ["fastapi", "run", "app/main.py", "--port", "80"]
 EOF
 ```
 
+In the same project root folder run the following command to build the docker image locally
+```
+docker build -t python-fastapi-example:3.12-slim .
+```
+
+Run the docker image in a test-container and visit `http://localhost` to verify
+```
+docker run -d --name test-container -p 80:80 python-fastapi-example:3.12-slim
+```
 
 
 
