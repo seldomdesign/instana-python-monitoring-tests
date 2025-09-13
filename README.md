@@ -1,12 +1,15 @@
-# Testing IBM Instana's Python monitoring capabilities
+# Testing IBM Instana's Python FastAPI monitoring capabilities
 
-A glance at IBM Instana's Pyhton monitoring capabilities (tracing, logs, metrics), including complete process of creating, containerize, publish to DockerHUB (yes, it's still free as of Setptember 2025) and test Instana's monitoring capabilities of a Pyhton FastAPI demo app in a K8s cluster.
+A glance at IBM Instana's Python FastAPI monitoring capabilities (tracing, logs, metrics), including complete process of creating, containerize, publish to DockerHUB (yes, it's still free as of Setptember 2025) and test Instana's monitoring capabilities of a Pyhton FastAPI demo app in a K8s cluster.
 
 Instana is a full-stack observability platform that provides real-time monitoring and performance management for modern applications, including microservices and cloud-native environments.
 
 Instana claims that, among hundreds of [supported technoligies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies) includes also Python, and it does so with a zero-configuration tool that automatically collects key metrics and distributed traces from your Python processes [***official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).
 
-The official Instana documentation covers the speciffic FastAPI case, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods).
+The official Instana documentation covers the speciffic case for FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
+Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. As this solution is based on a mutating webhook, presents a lot of challanges for the CI/CD pipelines, altering after deployment all resources that will need it's magic, rendering this zero-effort automated solution inadequate for an Enterprise environmetn. 
+
+Therefore, for the reminder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
 
 ### Requirements:
 - Working K8s cluster (any)
