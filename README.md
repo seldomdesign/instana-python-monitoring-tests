@@ -29,7 +29,7 @@ Therefore, for the reminder of this test we will focus on the alternative scenar
 
 # Building the FastAPI demo
 
-FastAPI is based on Starlette and PyDantic packages, but in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required pachkages.
+FastAPI is based on Starlette and PyDantic packages, but in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required packages.
 After setting up the [virtual environment](https://fastapi.tiangolo.com/virtual-environments/) install the previously mention `fastapi[standard]` dependency.
 
 In this example we will create and use fastapi-test-app as working folder
