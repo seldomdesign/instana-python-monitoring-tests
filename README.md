@@ -1,6 +1,6 @@
 # Testing IBM Instana's Python FastAPI monitoring capabilities
 
-A glance at IBM Instana's Python FastAPI monitoring capabilities (tracing, logs, metrics), including complete process of creating, containerize, publish to DockerHUB (yes, it's still free as of Setptember 2025) and test Instana's monitoring capabilities of a Pyhton FastAPI demo app in a K8s cluster.
+A glance at IBM Instana's Python FastAPI monitoring capabilities (tracing, logs, metrics), including complete process of creating, containerize, publish to DockerHUB and test Instana's monitoring capabilities of a Pyhton FastAPI demo app in a K8s cluster.
 
 ### Context:
 Instana is a full-stack observability platform that provides real-time monitoring and performance management for modern applications, including microservices and cloud-native environments.
@@ -15,8 +15,12 @@ In other workds... Anyone who uses CD tools, like ArgoCD for example, will conti
 Therefore, for the reminder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
 
 ### Requirements:
+- Python3 dev environment
+- Docker desktop or docker engine
 - Working K8s or OS cluster (any)
-- Instana Agent deployed on the cluster: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
+- Access to a self hosted or SaaS Instana active Tenant
+- Instana Agent deployed on the same cluster that the app will be depoyed: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
+- 
 
 ### Based on: 
 - Python 3.12
