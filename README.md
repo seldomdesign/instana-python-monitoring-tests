@@ -5,21 +5,28 @@ A glance at IBM Instana's Python FastAPI monitoring capabilities (tracing, logs,
 ### Context:
 Instana is a full-stack observability platform that provides real-time monitoring and performance management for modern applications, including microservices and cloud-native environments.
 
-Instana claims that, among hundreds of [supported technoligies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies) includes also Python, and it does so with a zero-configuration tool that automatically collects key metrics and distributed traces from your Python processes [***official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).
+Instana states that, among hundreds of [supported technoligies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies) includes also Python, and it does so with a zero-configuration tool that automatically collects key metrics and distributed traces from your Python processes [***official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).
 
-The official Instana documentation covers the speciffic case for FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
-Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. As this solution is based on a mutating webhook it presents challanges for the CI/CD pipelines, altering after deployment commits/syncs all resources that will accept and need it's magic.
+Furher more, Instana documentation covers the speciffic case of Python FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
+Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. 
 
-In other workds... Anyone who uses CD tools, like ArgoCD for example, will continously have their Apps in an unsynced status, due to Autotrace Webhooks magic, rendering this zero-effort automated solution inadequate for an Enterprise environment.
+Instana AutoTrace webhook is presented as a "zero-effort" solution that will automatically configure Instana tracing on Node.js, .NET Core, Ruby, and Python applications that run in a Kubernetes or Red Hat OpenShift cluster. At first all sounds good, yet, after using it in a Enterprise level environment, it presents challanges for CI/CD pipelines and deployment decisiions. 
+As confirmed in the [Limitations section] (https://www.ibm.com/docs/en/instana-observability/1.0.300?topic=kubernetes-instana-autotrace-webhook#limitations), it will work only on new K8s resources, requiring deletion of your existing Pods, ReplicaSets, StatefulStes, Deployments, and DeploymentConfigs and redeployment for the Instana AutoTrace webhook to apply its magic.
+
+***
+This requirement alone might trigger unwanted reactions from teams like Platform Engineering, Architecture and DevOps, among others, that don't like any actors to alter CI/CD pipelines after their completion, yet, this would not be the only thing to take into consideration for a final decision. Details like manual updates required for the allready installed instrumentation and the complex removal procedure (requires to redeploy all higher-order resources that were formerly modified by the AutoTrace webhook) will weight heavy against it's advantages.
+
+In other workds... those who use CD tools (like ArgoCD for example), need to redeploy all Apps in order for the webhook to be generated and will continously have their Apps in an unsynced status, due to Instnaa Autotrace webhook after the fact magic, rendering this "zero-effort" automated solution inadequate for an Enterprise environment.
+***
 
 Therefore, for the reminder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
 
 ### Requirements:
 - Python3 dev environment
-- Docker desktop or docker engine
+- Docker with package build capabilities
 - Working K8s or OS cluster (any)
-- Access to a self hosted or SaaS Instana active Tenant
-- Instana Agent deployed on the same cluster that the app will be depoyed: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
+- Access to a self hosted or Instana SaaS active Tenant. SaaS trial version work wit the exception of logging, due to trial version limitations.
+- Instana Agent deployed on the nodes the application will be depoyed: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
 - 
 
 ### Based on: 
@@ -27,9 +34,10 @@ Therefore, for the reminder of this test we will focus on the alternative scenar
 - FastAPI Example [official example](https://fastapi.tiangolo.com/#example).
 - Instana Official Documentation: [Monitoring Python](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python)
 
+
 # Building the FastAPI demo
 
-FastAPI is based on Starlette and PyDantic packages, but in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required packages.
+FastAPI is based on Starlette and PyDantic packages, but, in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required packages.
 After setting up the [virtual environment](https://fastapi.tiangolo.com/virtual-environments/) install the previously mention `fastapi[standard]` dependency.
 
 In this example we will create and use fastapi-test-app as working folder
@@ -43,7 +51,7 @@ pip install fastapi[standard]
 
 Verify with `pip freeze` that the following packages are installed: `fastapi`, `starlette`, `pydantic`, `pydantic_core`, `uvicorn`.
 
-Create the `main.py` (as seen on [fastapi](https://fastapi.tiangolo.com/#create-it))
+Create the `main.py` and add the example code, as seen on [FastAPI example](https://fastapi.tiangolo.com/#create-it)
 ```sh
 cat << EOF | tee main.py
 from typing import Union
@@ -60,13 +68,13 @@ def read_item(item_id: int, q: Union[str, None] = None):
 EOF
 ```
 
-Test the app by running `fastapi dev main.py` while in the `venv` environment. The post result should confirm that the Development Server is up an running, and the app is accessible at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Test the application by running `fastapi dev main.py` (while in the previously activated `venv` environment). The post result should confirm that the Development Server is up an running, and the application is accessible at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-If everything is working we can now proceed and containerize the applicaiton.
+If everything is working as expected we can now proceed and containerize the applicaiton.
 
 
 # Build Docker image
-Back in the project folder create `Dockerfile` and `requirements.txt` files
+Back in the project folder create `Dockerfile` and `requirements.txt` files as in [FastAPI in Containers - Docker](https://fastapi.tiangolo.com/deployment/docker/) example: [Package Requirement](https://fastapi.tiangolo.com/deployment/docker/#package-requirements), [Dockerfile](https://fastapi.tiangolo.com/deployment/docker/#dockerfile)
 ```
 cat << EOF | tee requirements.txt
 fastapi[standard]~=0.116
