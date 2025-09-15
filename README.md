@@ -101,10 +101,12 @@ Run the docker image in a test-container and visit `http://localhost` to verify
 docker run -d --name test-container -p 80:80 python-fastapi-example:3.12-slim
 ```
 
-
-
-
 # Add Instana Python package
+In order to enable the instrumentation we have to follow the [Python package manual installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method. The methos presents two alternatives once the `instana` package was installed:
+ - without code change: use the environment variable `AUTOWRAPT_BOOTSTRAP=instana` to enable the auto instrumentation
+ - with code change: manually importing the instana package `import instana`
+
+The 
 While in the venv install the instana pip package
 ```
 pip install instana
