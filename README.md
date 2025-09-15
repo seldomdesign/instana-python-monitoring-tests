@@ -102,16 +102,19 @@ docker run -d --name test-container -p 80:80 python-fastapi-example:3.12-slim
 ```
 
 # Add Instana Python package
-In order to enable the instrumentation we have to follow the [Python package manual installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method. The methos presents two alternatives once the `instana` package was installed:
- - without code change: use the environment variable `AUTOWRAPT_BOOTSTRAP=instana` to enable the auto instrumentation
- - with code change: manually importing the instana package `import instana`
 
-The 
+In order to enable the instrumentation we will follow the [Python package manual installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method. This method will require to add the `instana` python package to the project and use one of two options:
+ - without code change: use the environment variable `AUTOWRAPT_BOOTSTRAP=instana` to enable the auto instrumentation at a deployment level.
+ - with code change: manually importing the instana package inside the Python application code with `import instana`
+
+### Install the instana package 
 While in the venv install the instana pip package
 ```
 pip install instana
 ```
-Add few enhancements to the original FastAPI example like:
+
+### Optional enhancements
+This is optional and will add debug info in HTML form for the root path, and to the original FastAPI example like:
 - new HTML homepage using `HTMLResponse` from `fastapi.responses`
 - Instana EUM (javascript)
 - and environment information obtained using `os` package.
@@ -176,8 +179,8 @@ async def html_homepage():
   (function(s,t,a,n){s[t]||(s[t]=a,n=s[a]=function(){n.q.push(arguments)},
   n.q=[],n.v=2,n.l=1*new Date)})(window,"InstanaEumObject","ineum");
 
-  ineum('reportingUrl', 'https://eum-blue-saas.instana.io');
-  ineum('key', '3tMFmIR6TSeJhCaG0ujd9w');
+  ineum('reportingUrl', 'https://<eum-saas-endpoint>.instana.io');
+  ineum('key', '<instana-api-key>');
   ineum('trackSessions');
 </script>
 <script defer crossorigin="anonymous" src="https://eum.instana.io/eum.min.js"></script>
