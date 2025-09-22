@@ -7,25 +7,25 @@ Instana is a full-stack observability platform that provides real-time monitorin
 
 Instana states that, among hundreds of [supported technoligies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies) includes also Python, and it does so with a zero-configuration tool that automatically collects key metrics and distributed traces from your Python processes [***official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).
 
-Furher more, Instana documentation covers the speciffic case of Python FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
-Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metricas and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. 
+Furthermore, Instana documentation covers the specific case of Python FastAPI monitoring, offering a comprehensive comparison chart based on the chosen [Monitoring method](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#monitoring-methods), presenting two possible scenarios: Instana AutoTrace webhook or installing Instana Python package.
+Reached this point is when it becomes clear that the "zero-configuration tool that automatically collects key metrics and distributed traces" is in fact Instana's [Autotrace Webhook](https://www.ibm.com/docs/en/instana-observability/latest?topic=kubernetes-instana-autotrace-webhook), a Kubernetes and OpenShift-compatible admission controller mutating webhook. 
 
-Instana AutoTrace webhook is presented as a "zero-effort" solution that will automatically configure Instana tracing on Node.js, .NET Core, Ruby, and Python applications that run in a Kubernetes or Red Hat OpenShift cluster. At first all sounds good, yet, after using it in a Enterprise level environment, it presents challanges for CI/CD pipelines and deployment decisiions. 
+Instana AutoTrace webhook is presented as a "zero-effort" solution that will automatically configure Instana tracing on Node.js, .NET Core, Ruby, and Python applications that run in a Kubernetes or Red Hat OpenShift cluster. At first all sounds good, yet, after using it in a Enterprise level environment, it presents challenges for CI/CD pipelines and deployment decisions. 
 As confirmed in the [Limitations section] (https://www.ibm.com/docs/en/instana-observability/1.0.300?topic=kubernetes-instana-autotrace-webhook#limitations), it will work only on new K8s resources, requiring deletion of your existing Pods, ReplicaSets, StatefulStes, Deployments, and DeploymentConfigs and redeployment for the Instana AutoTrace webhook to apply its magic.
 
 ***
-This requirement alone might trigger unwanted reactions from teams like Platform Engineering, Architecture and DevOps, among others, that don't like any actors to alter CI/CD pipelines after their completion, yet, this would not be the only thing to take into consideration for a final decision. Details like manual updates required for the allready installed instrumentation and the complex removal procedure (requires to redeploy all higher-order resources that were formerly modified by the AutoTrace webhook) will weight heavy against it's advantages.
+This requirement alone might trigger unwanted reactions from all DevOps Teams that don't like any actors to alter CI/CD pipelines after their completion, yet, this would not be the only thing to take into consideration for a final decision. Details like manual updates required for the already installed instrumentation and the complex removal procedure (requires to redeploy all higher-order resources that were formerly modified by the AutoTrace webhook) will weight heavily against its advantages.
 
-In other workds... those who use CD tools (like ArgoCD for example), need to redeploy all Apps in order for the webhook to be generated and will continously have their Apps in an unsynced status, due to Instnaa Autotrace webhook after the fact magic, rendering this "zero-effort" automated solution inadequate for an Enterprise environment.
+In other words... those who use CD tools (like ArgoCD for example), need to redeploy all Apps for the webhook to be generated and will continuously have their Apps in an unsynced status, due to Instnaa Autotrace webhook after the fact magic, rendering this "zero-effort" automated solution inadequate for an Enterprise environment.
 ***
 
-Therefore, for the reminder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
+Therefore, for the remainder of this test we will focus on the alternative scenario: <strong>[Instana Python package](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=python-fastapi-monitoring#instana-python-package)</strong>
 
 ### Requirements:
 - Python3 dev environment
 - Docker with package build capabilities
 - Working K8s or OS cluster (any)
-- Access to a self hosted or Instana SaaS active Tenant. SaaS trial version work wit the exception of logging, due to trial version limitations.
+- Access to a self-hosted or SaaS Instana active Tenant. SaaS trial version will work also with the exception of logging, due to trial version limitations.
 - Instana Agent deployed on the nodes the application will be depoyed: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
 - 
 
@@ -70,7 +70,7 @@ EOF
 
 Test the application by running `fastapi dev main.py` (while in the previously activated `venv` environment). The post result should confirm that the Development Server is up an running, and the application is accessible at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-If everything is working as expected we can now proceed and containerize the applicaiton.
+If everything is working as expected, we can now proceed and containerize the application.
 
 
 # Build Docker image
@@ -103,7 +103,7 @@ docker run -d --name test-container -p 80:80 python-fastapi-example:3.12-slim
 
 # Add Instana Python package
 
-In order to enable the instrumentation we will follow the [Python package manual installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method. This method will require to add the `instana` python package to the project and use one of two options:
+In order to enable the instrumentation, we will follow the [Python package manual installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method. This method will require you to add the `instana` python package to the project and use one of two options:
  - without code change: use the environment variable `AUTOWRAPT_BOOTSTRAP=instana` to enable the auto instrumentation at a deployment level.
  - with code change: manually importing the instana package inside the Python application code with `import instana`
 
@@ -196,8 +196,15 @@ def read_item(item_id: int, q: Union[str, None] = None):
 EOF
 ```
 
-
-Rebuild the docker image and test it's integrity
+### Rebuild the docker image and test it's integrity
+Modify the `requirements.txt` to add Instana Python package
+```
+cat << EOF | tee requirements.txt
+fastapi[standard]~=0.116
+pydantic~=2.11
+instana~=3.8
+EOF
+```
 
 
 
