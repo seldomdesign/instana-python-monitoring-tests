@@ -27,7 +27,6 @@ Therefore, for the remainder of this test we will focus on the alternative scena
 - Working K8s or OS cluster (any)
 - Access to a self-hosted or SaaS Instana active Tenant. SaaS trial version will work also with the exception of logging, due to trial version limitations.
 - Instana Agent deployed on the nodes the application will be depoyed: [Installing the Instana agent on Kubernetes](https://www.ibm.com/docs/en/instana-observability/latest?topic=agents-installing-kubernetes).
-- 
 
 ### Based on: 
 - Python 3.12
