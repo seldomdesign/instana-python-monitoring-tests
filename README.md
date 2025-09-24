@@ -34,7 +34,7 @@ Therefore, for the remainder of this test we will focus on the alternative scena
 - Instana Official Documentation: [Monitoring Python](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python)
 
 
-# Building the FastAPI demo
+## Building the FastAPI demo
 
 FastAPI is based on Starlette and PyDantic packages, but, in our case, the FastApi example uses the `fastapi[standard]` dependency which will include all required packages.
 After setting up the [virtual environment](https://fastapi.tiangolo.com/virtual-environments/) install the previously mention `fastapi[standard]` dependency.
@@ -72,7 +72,7 @@ Test the application by running `fastapi dev main.py` (while in the previously a
 If everything is working as expected, we can now proceed and containerize the application.
 
 
-# Build Docker image
+## Docker image
 Back in the project folder create `Dockerfile` and `requirements.txt` files as in [FastAPI in Containers - Docker](https://fastapi.tiangolo.com/deployment/docker/) example: [Package Requirement](https://fastapi.tiangolo.com/deployment/docker/#package-requirements), [Dockerfile](https://fastapi.tiangolo.com/deployment/docker/#dockerfile)
 ```
 cat << EOF | tee requirements.txt
