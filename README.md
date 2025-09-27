@@ -176,16 +176,14 @@ To enable Instana instrumentation, we’ll use the [manual Python package instal
 4**. Create a kubernetes deployment with the required environment variable:** `AUTOWRAPT_BOOTSTRAP = instana`
 
 Complete list of available environment variables can be found here: [IBM Instana Observability - Environment variables](https://www.ibm.com/docs/en/instana-observability/latest?topic=references-environment-variables)
-Required
-
 
 ---
 
 ### Deployment example
 
-The following deployment manifest uses the Docker Hub container image build using the code published here [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py).
+The following deployment manifest uses the Docker Hub container image build using the code available in this GitHub project [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py).
 
-The `main.py` code includes a new HTML hompage with rendered version of a set of representative environment variables.
+The `main.py` code includes a new HTML hompage with rendered version of representative set of environment variables.
 
 
 ```yaml
@@ -276,7 +274,7 @@ spec:
 ```
 
 Example of an Ingress endpoint for a `nginx` K8s IngressClassName:
-```
+```yaml
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
