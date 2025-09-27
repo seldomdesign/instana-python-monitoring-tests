@@ -169,20 +169,20 @@ To enable Instana instrumentation, we’ll use the [manual Python package instal
   ```
   instana~=3.8
   ```
-**2. Rebuild the Docker image and test it locally.**
+**2.** Rebuild the Docker image and test it locally.
 
-**3. Build and push the image to a container registry. **
+**3. Build and push the image** to a container registry.
 
-4**. Create a kubernetes deployment with the required environment variable:** `AUTOWRAPT_BOOTSTRAP = instana`
+4**. Create a kubernetes deployment** with the required environment variable: 
+```AUTOWRAPT_BOOTSTRAP = instana```
 
-Complete list of available environment variables can be found here: [IBM Instana Observability - Environment variables](https://www.ibm.com/docs/en/instana-observability/latest?topic=references-environment-variables)
+A full list of available environment variables can be found in the [IBM Instana Observability - Environment variables](https://www.ibm.com/docs/en/instana-observability/latest?topic=references-environment-variables) documentation.
 
 ---
 
 ### Deployment example
 
-The following deployment manifest uses the Docker Hub container image build using the code available in this GitHub project [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py). The published image includes a new hompage with HTML rendered version of the most representative set of environment variables, either Instana speciffic or kubernetes ones.
-
+Below is an example Kubernetes deployment manifest that uses a published Docker-Hub image based on this GitHub [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py).
 
 ```yaml
 ---
@@ -271,7 +271,7 @@ spec:
     targetPort: 80
 ```
 
-Example of an Ingress endpoint for a `nginx` K8s IngressClassName:
+### Example Ingress (Nginx):
 ```yaml
 ---
 apiVersion: networking.k8s.io/v1
@@ -302,4 +302,4 @@ This guide demonstrates:
 - Deploying to **Kubernetes**
 - Enabling **Instana Python instrumentation** without relying on the AutoTrace Webhook
 
-This approach offers **greater control** and avoids the CI/CD disruptions often caused by AutoTrace in enterprise environments.
+This approach offers **greater control** and avoids the **CI/CD disruptions** often caused by Instana AutoTrace Webhook in enterprise environments.
