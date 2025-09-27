@@ -1,6 +1,6 @@
 # Testing IBM Instana’s Python FastAPI Monitoring Capabilities
 
-A look at **IBM Instana’s Python FastAPI monitoring features** — tracing, logs, and metrics—including the full process of creating, containerizing, publishing to Docker Hub, and testing Instana’s monitoring of a Python FastAPI demo app in a Kubernetes (K8s) cluster.
+A look at **IBM Instana’s Python FastAPI monitoring features** — tracing, logs, and metrics — including the full process of creating, containerizing, publishing to Docker Hub, and testing Instana’s monitoring of a Python FastAPI demo app in a Kubernetes (K8s) cluster.
 
 ## Context
 [IBM Instana](https://www.ibm.com/products/instana) is a **full-stack observability platform** that provides real-time monitoring and performance management for modern applications, including microservices and cloud-native environments.
@@ -173,7 +173,7 @@ To enable Instana instrumentation, we’ll use the [manual Python package instal
 
 **3. Build and push the image** to a container registry.
 
-4**. Create a kubernetes deployment** with the required environment variable: 
+**4. Create a kubernetes deployment** with the required environment variable: 
 ```AUTOWRAPT_BOOTSTRAP = instana```
 
 A full list of available environment variables can be found in the [IBM Instana Observability - Environment variables](https://www.ibm.com/docs/en/instana-observability/latest?topic=references-environment-variables) documentation.
