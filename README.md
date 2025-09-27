@@ -278,7 +278,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-fastapi-monitoring-demo
-  namespace: nstana-python-demo
+  namespace: instana-python-demo
 spec:
   rules:
   - host: fastapi-monitoring-demo.example-domain.local
