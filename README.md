@@ -181,9 +181,7 @@ Complete list of available environment variables can be found here: [IBM Instana
 
 ### Deployment example
 
-The following deployment manifest uses the Docker Hub container image build using the code available in this GitHub project [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py).
-
-The `main.py` code includes a new HTML hompage with rendered version of representative set of environment variables.
+The following deployment manifest uses the Docker Hub container image build using the code available in this GitHub project [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py). The published image includes a new hompage with HTML rendered version of the most representative set of environment variables, either Instana speciffic or kubernetes ones.
 
 
 ```yaml
