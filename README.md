@@ -124,7 +124,7 @@ project/
 ---
 ## Containerizing the Application
 
-### 1. Create `requirements.txt` and `Dockerfile` inside project's root folder:
+**1. Create `requirements.txt` and `Dockerfile` inside project's root folder:**
 
 ```sh
 cat << EOF | tee requirements.txt
@@ -145,13 +145,13 @@ EOF
 ```
 
 
-### 2. Build the Docker image:
+**2. Build the Docker image:**
 
 ```sh
 docker build -t python-fastapi-example:3.12-slim .
 ```
 
-### 3. Run the container for testing:
+**3. Run the container for testing:**
 
 ```sh
 docker run -d --name test-container -p 80:80 python-fastapi-example:3.12-slim
