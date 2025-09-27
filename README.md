@@ -54,7 +54,7 @@ Based on:
 
 FastAPI relies on Starlette and Pydantic, but the `fastapi[standard]` dependency includes everything we need.
 
-### 1. Create the project folder and virtual environment:
+**1. Create the project folder and virtual environment:**
 
 ```sh
 mkdir app
@@ -63,13 +63,13 @@ python3 -m venv ./venv
 source ./venv/bin/activate
 pip install fastapi[standard]
 ```
-### 2. Verify the required packages:
+**2. Verify the required packages:**
 ```sh
 pip freeze
 # Expected packages: fastapi, starlette, pydantic, pydantic_core, uvicorn
 ```
 
-### 3. Create the application file (`main.py`):
+**3. Create the application file (`main.py`):**
 ```sh
 cat << EOF | tee main.py
 from typing import Union
@@ -100,7 +100,7 @@ project/
         └── pyvenv.cfg
 ```
 
-### 4. Test it locally:
+**4. Test it locally:**
 ```
 fastapi dev main.py
 ```
@@ -165,15 +165,15 @@ Visit `http://localhost` to confirm it’s working.
 
 To enable Instana instrumentation, we’ll use the [manual Python package installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method.
 
-1. Add the Instana package to `requirements.txt`:
+**1. Add the Instana package to `requirements.txt`:**
   ```
   instana~=3.8
   ```
-2. Rebuild the Docker image and test it locally.
+**2. Rebuild the Docker image and test it locally.**
 
-3. Build and push the image to a container registry. 
+**3. Build and push the image to a container registry. **
 
-4. Create a kubernetes deployment with the required environment variable `AUTOWRAPT_BOOTSTRAP = instana`
+4**. Create a kubernetes deployment with the required environment variable:** `AUTOWRAPT_BOOTSTRAP = instana`
 
 Complete list of available environment variables can be found here: [IBM Instana Observability - Environment variables](https://www.ibm.com/docs/en/instana-observability/latest?topic=references-environment-variables)
 Required
@@ -275,7 +275,7 @@ spec:
     targetPort: 80
 ```
 
-Example of an Ingress endpoint (in case an K8s Ingress is present):
+Example of an Ingress endpoint for a `nginx` K8s IngressClassName:
 ```
 ---
 apiVersion: networking.k8s.io/v1
@@ -295,4 +295,4 @@ spec:
             name: fastapi-monitoring-demo
             port:
               number: 80
-  ingressClassN
+  ingressClassName: nginx
