@@ -292,3 +292,14 @@ spec:
             port:
               number: 80
   ingressClassName: nginx
+```
+
+## Summary
+
+This guide demonstrates:
+- Setting up a **FastAPI demo app** with Python 3.12
+- **Containerizing** it with Docker
+- Deploying to **Kubernetes**
+- Enabling **Instana Python instrumentation** without relying on the AutoTrace Webhook
+
+This approach offers **greater control** and avoids the CI/CD disruptions often caused by AutoTrace in enterprise environments.
