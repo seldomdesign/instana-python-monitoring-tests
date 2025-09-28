@@ -1,18 +1,16 @@
 # Testing IBM Instana’s Python FastAPI Monitoring Capabilities
 
-A look at **IBM Instana’s Python FastAPI monitoring features** — tracing, logs, and metrics — including the full process of creating, containerizing, publishing to Docker Hub, and testing Instana’s monitoring of a Python FastAPI demo app in a Kubernetes (K8s) cluster.
+A look at **IBM Instana’s Python FastAPI monitoring features** — tracing, logs, and metrics — including the full process of creating, containerizing and testing Instana’s monitoring of a Python FastAPI demo app in a Kubernetes (K8s) cluster.
 
 ## Context
 [IBM Instana](https://www.ibm.com/products/instana) is a **full-stack observability platform** that provides real-time monitoring and performance management for modern applications, including microservices and cloud-native environments.
 
-Instana claims to support **[hundreds of technologies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies)**, including Python, via a **“zero-configuration” tool** that automatically collects key metrics and distributed traces from Python processes.
-([See the official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage).)
+Instana claims to support **[hundreds of technologies](https://www.ibm.com/docs/en/instana-observability/latest?topic=configuring-monitoring-supported-technologies)**, including Python, via a **“zero-configuration” tool** that automatically collects key metrics and distributed traces from Python processes. [See the official reference](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python#usage)
 
-Instana’s documentation also covers Python FastAPI monitoring, providing a comparison chart for two possible approaches:
-
+Instana’s documentation also covers **Python FastAPI monitoring**, providing a [comparison chart](https://www.ibm.com/docs/en/instana-observability/1.0.305?topic=python-fastapi-monitoring#monitoring-methods) for two possible approaches:
 
 1. **Instana AutoTrace Webhook**, or
-2. **Installing the Instana Python package**.
+2. Installing the **Instana Python package**.
 
 At this point, it becomes clear that the so-called *“zero-configuration tool”* is actually the **Instana AutoTrace Webhook**, a Kubernetes and OpenShift compatible admission-controller mutating webhook.
 
@@ -35,6 +33,7 @@ In short, organizations using CD tools like **Argo CD** will have to **redeploy 
 
 For the rest of this walkthrough, we will use the **Instana Python package** approach instead of the AutoTrace Webhook.
 
+
 ### Requirements
 
 - Python 3 development environment
@@ -50,6 +49,7 @@ Based on:
 - Instana [Python monitoring documentations](https://www.ibm.com/docs/en/instana-observability/latest?topic=technologies-monitoring-python)
 
 ---
+
 ## Building the FastAPI Demo
 
 FastAPI relies on Starlette and Pydantic, but the `fastapi[standard]` dependency includes everything we need.
@@ -87,7 +87,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
 EOF
 ```
 
-This should create a folder structure 
+This will create a folder structure similiar to:
 ```
 project/
 └── app/
@@ -161,6 +161,7 @@ Visit `http://localhost` to confirm it’s working.
 
 
 ---
+
 ## Adding Instana Python Instrumentation
 
 To enable Instana instrumentation, we’ll use the [manual Python package installation](https://www.ibm.com/docs/en/instana-observability/1.0.304?topic=technologies-monitoring-python#manual-installation) method.
@@ -169,9 +170,12 @@ To enable Instana instrumentation, we’ll use the [manual Python package instal
   ```
   instana~=3.8
   ```
+
 **2.** Rebuild the Docker image and test it locally.
 
-**3. Build and push the image** to a container registry.
+**3. Publish the image** to a container registry.
+Allready published images are available at this DockerHub repository: [seldomdesign/instana-python-monitoring-tests
+](https://hub.docker.com/r/seldomdesign/instana-python-monitoring-tests/tags)
 
 **4. Create a kubernetes deployment** with the required environment variable: 
 ```AUTOWRAPT_BOOTSTRAP = instana```
@@ -182,7 +186,7 @@ A full list of available environment variables can be found in the [IBM Instana 
 
 ### Deployment example
 
-Below is an example Kubernetes deployment manifest that uses a published Docker-Hub image based on this GitHub [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py).
+The following example is a Kubernetes manifest that uses a Docker-Hub image based on this [project/app/main.py](https://github.com/seldomdesign/instana-python-monitoring-tests/blob/main/project/app/main.py) code.
 
 ```yaml
 ---
@@ -296,7 +300,7 @@ spec:
 
 ## Summary
 
-This guide demonstrates:
+This guide illustrates:
 - Setting up a **FastAPI demo app** with Python 3.12
 - **Containerizing** it with Docker
 - Deploying to **Kubernetes**
